@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/style.css">
+<%- include("nav") %>
+
+<div class="container">
+  <h2>Product Master</h2>
+
+  <form method="POST" action="/products/add">
+    <input type="text" name="product_name" placeholder="Product Name" required>
+
+    <select name="category_id" required>
+      <% categories.forEach(c => { %>
+        <option value="<%= c.category_id %>"><%= c.category_name %></option>
+      <% }) %>
+    </select>
+
+    <button>Add Product</button>
+  </form>
+
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Action</th>
+    </tr>
+
+    <% products.forEach(p => { %>
+      <tr>
+        <td><%= p.product_id %></td>
+        <td><%= p.product_name %></td>
+        <td><%= p.category_name %></td>
+        <td class="action">
+          <a href="/products/edit/<%= p.product_id %>">Edit</a>
+          <a href="/products/delete/<%= p.product_id %>"
+             onclick="return confirm('Delete product?')">Delete</a>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+
+  <div class="pagination">
+    <% if (page > 1) { %>
+      <a href="/products?page=<%= page - 1 %>">Prev</a>
+    <% } %>
+
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <% if (i === page) { %>
+        <span class="active"><%= i %></span>
+      <% } else { %>
+        <a href="/products?page=<%= i %>"><%= i %></a>
+      <% } %>
+    <% } %>
+
+    <% if (page < totalPages) { %>
+      <a href="/products?page=<%= page + 1 %>">Next</a>
+    <% } %>
+  </div>
+</div>

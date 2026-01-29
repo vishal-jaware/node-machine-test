@@ -1,0 +1,18 @@
+<link rel="stylesheet" href="/style.css">
+<%- include("nav") %>
+
+<h2>Edit Product</h2>
+
+<form method="POST" action="/products/edit/<%= product.product_id %>">
+  <input type="text" name="product_name" value="<%= product.product_name %>" required>
+
+  <select name="category_id" required>
+    <% categories.forEach(c => { %>
+      <option value="<%= c.category_id %>" <%= c.category_id === product.category_id ? 'selected' : '' %>>
+        <%= c.category_name %>
+      </option>
+    <% }) %>
+  </select>
+
+  <button>Update</button>
+</form>
