@@ -1,22 +1,35 @@
 const mysql = require("mysql2");
 
-const DATABASE_URL = process.env.DATABASE_URL?.trim();
+const {
+  MYSQLHOST,
+  MYSQLPORT,
+  MYSQLUSER,
+  MYSQLPASSWORD,
+  MYSQLDATABASE,
+} = process.env;
 
-if (!DATABASE_URL) {
-  console.error("❌ DATABASE_URL is empty or invalid");
+if (!MYSQLHOST) {
+  console.error("❌ MySQL environment variables missing");
   process.exit(1);
 }
 
-const db = mysql.createConnection(DATABASE_URL);
-
-db.connect((err) => {
-  if (err) {
-    console.error("❌ MySQL connection failed:", err.message);
-    process.exit(1);
-  }
-  console.log("✅ MySQL Connected");
+const connection = mysql.createConnection({
+  host: MYSQLHOST,
+  port: MYSQLPORT,
+  user: MYSQLUSER,
+  password: MYSQLPASSWORD,
+  database: MYSQLDATABASE,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-console.log("DATABASE_URL:", process.env.DATABASE_URL);
+connection.connect((err) => {
+  if (err) {
+    console.error("❌ MySQL connection failed:", err.message);
+  } else {
+    console.log("✅ MySQL Connected Successfully");
+  }
+});
 
-module.exports = db;
+module.exports = connection;
