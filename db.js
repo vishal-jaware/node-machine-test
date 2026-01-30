@@ -1,16 +1,13 @@
 const mysql = require("mysql2");
 
-if (!process.env.DATABASE_URL) {
-  console.error("❌ DATABASE_URL is missing");
+const DATABASE_URL = process.env.DATABASE_URL?.trim();
+
+if (!DATABASE_URL) {
+  console.error("❌ DATABASE_URL is empty or invalid");
   process.exit(1);
 }
 
-const db = mysql.createConnection({
-  uri: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const db = mysql.createConnection(DATABASE_URL);
 
 db.connect((err) => {
   if (err) {
