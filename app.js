@@ -4,6 +4,7 @@ const path = require("path");
 
 const categoryRoutes = require("./routes/category.routes");
 const productRoutes = require("./routes/product.routes");
+const home = require('./routes/home.routes')
 
 const app = express();
 
@@ -17,14 +18,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/categories", categoryRoutes);
 app.use("/products", productRoutes);
-
-// HOME ROUTE (IMPORTANT)
-app.get("/", (req, res) => {
-  res.render("home", {
-    totalCategories: 0,
-    totalProducts: 0
-  });
-});
+app.get("/",home)
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
