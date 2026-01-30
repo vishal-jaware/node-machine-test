@@ -1,19 +1,23 @@
 const mysql = require("mysql2");
 
+if (!process.env.DATABASE_URL) {
+  console.error("❌ DATABASE_URL is missing");
+  process.exit(1);
+}
+
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "root",
-  database: process.env.DB_NAME || "machine_test",
-  port: process.env.DB_PORT || 3306
+  uri: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 db.connect((err) => {
   if (err) {
     console.error("❌ MySQL connection failed:", err.message);
-  } else {
-    console.log("✅ MySQL Connected");
+    process.exit(1);
   }
+  console.log("✅ MySQL Connected");
 });
 
 module.exports = db;
